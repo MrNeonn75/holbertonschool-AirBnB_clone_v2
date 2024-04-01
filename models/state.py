@@ -14,7 +14,7 @@ class State(BaseModel, Base):
     Attributes:
         name: input name
     """
-    __tablename__ = 'hbnb_dev_db.states'
+    __tablename__ = 'states'
     name = Column(String(128), nullable=False)
     cities = relationship("City", cascade='all, delete, delete-orphan',
                           backref="state")
