@@ -57,21 +57,15 @@ class FileStorage:
             json.dump(my_dict, f)
 
     def reload(self):
-        """deserialize the JSON file to __objects"""
+        """serialize the file path to JSON file path
+        """
         try:
             with open(self.__file_path, 'r', encoding="UTF-8") as f:
-                try:
-                    obj_dict = json.load(f)
-                    for key, value in obj_dict.items():
-                        class_name = value.get('__class__')
-                        if class_name:
-                            cls = eval(class_name)
-                            self.__objects[key] = cls(**value)
-                except json.decoder.JSONDecodeError:
-                    print("JSONDecodeError: Unable to decode JSON in file.")
+                for key, value in (json.load(f)).items():
+                    value = eval(value["__class__"])(**value)
+                    self.__objects[key] = value
         except FileNotFoundError:
-            print(f"FileNotFoundError: File '{self.__file_path}' not found.")
-
+            pass
 
     def delete(self, obj=None):
         """ delete an existing element
