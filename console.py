@@ -113,25 +113,29 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    def do_create(self, args):
-        """ Create an object of any class"""
-        try:
-            if not args:
-                raise SyntaxError()
-            arg_list = args.split(" ")
-            kw = {}
-            for arg in arg_list[1:]:
-                arg_splited = arg.split("=")
-                arg_splited[1] = eval(arg_splited[1])
-                if type(arg_splited[1]) is str:
-                    arg_splited[1] = arg_splited[1].replace("_", " ")
-                    arg_splited[1] = arg_splited[1].replace('"', '\\"')
-                kw[arg_splited[0]] = arg_splited[1]
-        except SyntaxError:
+    def do_create(self, arg):
+        """Create a new instance of a given class."""
+        if not arg:
             print("** class name missing **")
-        except NameError:
+            return
+
+        args = arg.split()
+        classname = args[0]
+
+        if classname not in models.classes.keys():
             print("** class doesn't exist **")
-        new_instance = HBNBCommand.classes[arg_list[0]](**kw)
+            return
+
+        if len(args) < 2:
+            print("** instance id missing **")
+            return
+
+        new_instance = models.classes[classname]()
+        for pair in args[1:]:
+            key, value = pair.split('=')
+            if hasattr(new_instance, key):
+                value = value.strip('"')
+                setattr(new_instance, key, value)
         new_instance.save()
         print(new_instance.id)
 
