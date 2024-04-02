@@ -7,10 +7,7 @@ from datetime import datetime
 from sqlalchemy import Column, Integer, String, DateTime
 
 
-if models.storage_t == "db":
-    Base = declarative_base()
-else:
-    Base = object
+Base = declarative_base()
 
 
 class BaseModel:
