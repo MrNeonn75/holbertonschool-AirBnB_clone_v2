@@ -13,5 +13,6 @@ def hi_hbnb():
     """display “Hello HBNB!” on the terminal"""
     return 'Hello HBNB!'
 
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port='5000')
